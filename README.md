@@ -1,56 +1,143 @@
-# Welcome to your Expo app 👋
+# DumbTracker
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A simple intuitive 24h time tracker for daily acitivity tracking.
 
-## Get started
+## Overview
 
-1. Install dependencies
+### Problem
 
-   ```bash
-   npm install
-   ```
+Existing Time/Habit Trackers do not provide simplicity for quick daily activity tracking.
 
-2. Start the app
+- Spreadsheets offer flexibility and data visualization, but require manual setup and the UI is not intuitive for simple use.
 
-   ```bash
-   npx expo start
-   ```
+- Pomodoro-Timers offer simple UX, but not designed for tracking general daily activities.
 
-In the output, you'll find options to open the app in a
+- General Habit Trackers offer excessive features, often requiring configuration and account setup. They also focus on habit completion, but not on time spent on activities.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Solution:
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+A simple daily activity tracker focused tracking and reviewing time spent on activities. The system allows users to immedately start tracking, prioritizing essential features and an intuitive UI.
 
-## Get a fresh project
+### Users:
 
-When you're ready, run:
+- Users who want minimal features in their tracking apps.
+- Users who want to track time spent on their daily activities.
 
-```bash
-npm run reset-project
-```
+### Success:
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+- Tracking starts with one button press with no pop ups.
+- Users can view the time spent on each activity in a pie chart.
 
-### Other setup steps
+## Requirements
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+### Functional
 
-## Learn more
+The system must allow user to:
 
-To learn more about developing your project with Expo, look at the following resources:
+- [ ] start and stop activity tracking with a single button press.
+- [ ] record the time spent on each activity.
+- [ ] view recorded activities and their durations.
+- [ ] display the distribution of time spent across activities in a pie chart.
+- [ ] create and manage activity categories.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+The system should allow user to:
 
-## Join the community
+- [ ] review records from previous days.
+- [ ] track multiple activities at simultaneously.
+- [ ] automatically include device screen-time data into activity records
+- [ ] automatically pause tracking when designated distracting application is used.
 
-Join our community of developers creating universal apps.
+### Non-Functional
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+The system must:
+
+- [ ] allow tracking to begin without pop-ups or mandatory setup
+- [ ] minimize interactions and interface
+
+## Architecture & Desgin
+
+### Components
+
+**Timer:**
+
+- starts when told to start, stop when told to stop.
+- gives the start and end times to Storage.
+
+**Storage:**
+
+- saves and loads records from a local file.
+- gets record from Timer
+- gievs record for PieChart
+
+**Pie Chart:**
+
+- adds up time logged per activity and draws it.
+- gets record from Storage, then draw.
+
+**UI:**
+
+- show start/stop button
+- show accumulated time while tracking
+- show tab menu to switch between timer/chart/other
+- show screen to let users edit activities
+
+### Data:
+
+`Activity: name, category`
+
+`Record: activity, start_time, end_time`
+
+### Work Flow
+
+#### User tracks an acitivity
+
+1. UI tells Timer to start
+2. Timer notes start time
+3. UI shows running time and stop sign/button
+4. User presses stop. Timer notes end time & UI display accumulated time.
+5. UI asks Storage for the activity list and shows it.
+6. User selects an activity. Timer sends times & acitivty to storage.
+7. Storage to saves received data as new `Record`
+
+#### User wants to add/edit acitivity
+
+1. User switches to 'other' tab
+2. UI shows acitvity & setting
+3. UI asks Storage for the activity list and shows it
+4. User picks an pre-existing activity or new one, and edits it
+5. User presses Complete
+6. UI gives the new data to Storage to save
+
+#### User press stats on tab menu
+
+1. UI switches to the stats page
+2. Pie Chart asks Storage for all `Records`
+3. Pie Chart adds up time per activity and draws it
+4. UI displays the chart
+
+### Platform:
+
+Mobile app using React Native & Expo. stored in local storage
+
+## Limitation & Future Implementation
+
+### Limitations:
+
+- Cross-device data synchronization
+- No cloud storage
+- Expo limit
+
+### Future Implementation:
+
+- Cross-device data transition
+- Setting goals for activities
+- alternative stats visualization based on defined goals
+
+## Planning
+
+1. Tab menu and basic UI setup
+2. Timer,
+3. Storage
+4. activity picker
+5. Pie Chart
+6. polish
