@@ -56,30 +56,26 @@ The system must:
 
 ## Architecture & Desgin
 
-### Components
+### Screens
 
-**Timer:**
+**Timer (index):**
 
-- starts when told to start, stop when told to stop.
-- gives the start and end times to Storage.
+- shows button that can be pressed to start tracking
+- while tracking, shows time elapsed and stop button
+- once stopped, shows activity picker.
+- once activity is picked, shows confirmation and gives the start and end times to Storage.
 
-**Storage:**
-
-- saves and loads records from a local file.
-- gets record from Timer
-- gievs record for PieChart
-
-**Pie Chart:**
+**Stats:**
 
 - adds up time logged per activity and draws it.
 - gets record from Storage, then draw.
 
-**UI:**
+**other(unnamed):**
 
-- show start/stop button
-- show accumulated time while tracking
-- show tab menu to switch between timer/chart/other
-- show screen to let users edit activities
+- saves and loads records from a local file.
+- lets user create and manage activities
+- gets record from Timer
+- gievs record for PieChart
 
 ### Data:
 
@@ -87,33 +83,31 @@ The system must:
 
 `Record: activity, start_time, end_time`
 
-### Work Flow
+### Use Case
 
 #### User tracks an acitivity
 
-1. UI tells Timer to start
-2. Timer notes start time
-3. UI shows running time and stop sign/button
-4. User presses stop. Timer notes end time & UI display accumulated time.
-5. UI asks Storage for the activity list and shows it.
-6. User selects an activity. Timer sends times & acitivty to storage.
-7. Storage to saves received data as new `Record`
+1. User presses Timer button
+2. Timer notes start time and show running time and stop sign.
+3. User presses stop. Timer notes end time.
+4. Timer asks Storage for the activity list and displays it.
+5. User selects an activity. Timer sends times & acitivty to storage.
+6. Storage saves received data as new `Record`
+7. Timer displays confirmation screen
 
 #### User wants to add/edit acitivity
 
 1. User switches to 'other' tab
-2. UI shows acitvity & setting
-3. UI asks Storage for the activity list and shows it
-4. User picks an pre-existing activity or new one, and edits it
-5. User presses Complete
-6. UI gives the new data to Storage to save
+2. 'other' screen loads the activity list from Storage
+3. User picks an pre-existing activity or new one, and edits it
+4. User presses complete, new data is sent to Storage.
+5. Storage saves data.
 
-#### User press stats on tab menu
+#### User wantst to see the stats
 
-1. UI switches to the stats page
-2. Pie Chart asks Storage for all `Records`
-3. Pie Chart adds up time per activity and draws it
-4. UI displays the chart
+1. User switches to the stats page
+2. Stats asks Storage for all `Records`
+3. Stats adds up time per activity and draws it
 
 ### Platform:
 
