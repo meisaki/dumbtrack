@@ -79,9 +79,14 @@ The system must:
 
 ### Data:
 
-`Activity: name, category`
+`Activities: act_id(PK), name, category`
 
-`Record: activity, start_time, end_time`
+- having id allows editing name later on without causing issues.
+
+`Records: rec_id(PK), activity_id(FK), start_time, end_time`
+
+- activity_id(FK) references activity.act_id
+- Records store ID, so renaming activity does not affect past Records.
 
 ### Use Case
 
