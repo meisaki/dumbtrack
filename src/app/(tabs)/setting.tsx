@@ -6,17 +6,12 @@ export default function Setting() {
   return (
     <SafeAreaView style={styles.container}>
       <Text>Acitivity Page</Text>
-      {/* <Button
-        title="reset"
-        onPress={async () => {
-          await reset();
-        }}
-      /> */}
       <Button
         title="test"
-        onPress={async () => {
-          const acts = await getActivities();
-          console.log(acts);
+        onPress={() => {
+          getActivities().then((acts) => {
+            console.log(acts);
+          });
         }}
       />
     </SafeAreaView>
