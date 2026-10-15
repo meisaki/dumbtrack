@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 export default function RootLayout() {
   const [ready, setReady] = useState(false);
+
+  // get the storage ready
   useEffect(() => {
     setup()
       .then(() => setReady(true))

@@ -1,4 +1,4 @@
-import { getActivities } from "@/storage/storage";
+import { getRecords } from "@/storage/storage";
 import { Button, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -9,8 +9,12 @@ export default function Setting() {
       <Button
         title="test"
         onPress={() => {
-          getActivities().then((acts) => {
-            console.log(acts);
+          // getActivities().then((acts) => {
+          //   console.log(acts);
+          // });
+
+          getRecords().then((recs) => {
+            console.log(recs);
           });
         }}
       />

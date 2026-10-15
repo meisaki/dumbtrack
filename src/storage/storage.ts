@@ -9,7 +9,7 @@ export type Activity = {
 };
 
 export type Record = {
-    activity: number, 
+    activity_id: number, 
     start_time: number, 
     end_time: number
 }
@@ -100,13 +100,13 @@ export async function saveActivity(newAct: Activity) {
     `, newAct.name, newAct.category);
 };
 
-export async function saveRecord(newRec: Record) {
+export async function saveRecord(act_id: number, start_time: number, end_time: number) {
     const db = await dbPromise;
 
     await db.runAsync(`
-        INSERT INTO Records
+        INSERT INTO Records (activity_id, start_time, end_time)
         VALUES (?, ?, ?)
-    `, newRec.activity, newRec.start_time, newRec.end_time);
+    `, act_id, start_time, end_time);
 };
 
 export async function getActivitiesByCategory() {
@@ -130,4 +130,19 @@ export async function getActivitiesByCategory() {
     }
 
     return groups;
+}
+
+/**
+ * Gets the name of one activity by its id
+ * 
+ * @param id acitivty's act id
+ * @returns the activity name
+ */
+export async function getSingleActivity(id: number) {
+    const db = await dbPromise;
+    const row = await db.getFirstAsync<{ name: string }>(`
+        SELECT name FROM Activities
+        WHERE act_id = ?    
+    `, id)
+    return row!.name
 }

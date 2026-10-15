@@ -1,9 +1,10 @@
+import { saveRecord } from "@/storage/storage";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Clock from "../components/Clock";
+import Confirmation from "../components/Confirmation";
 import Picker from "../components/Picker";
-import Reset from "../components/Reset";
 import TimerButton from "../components/TimerButton";
 
 type States = "idle" | "running" | "pick" | "done";
@@ -28,6 +29,8 @@ export default function Index() {
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [elapsed, setElapsed] = useState(getTimeFormat(0));
+  const [pickedActID, setPickedActID] = useState(0);
+  const [addRecord, setAddRecord] = useState(false);
 
   useEffect(() => {
     if (state !== "running") return;
@@ -37,6 +40,18 @@ export default function Index() {
     }, 50);
     return () => clearInterval(id);
   }, [state, startTime]);
+
+  useEffect(() => {
+    if (!addRecord) return;
+
+    saveRecord(pickedActID, startTime, endTime).then(() => setAddRecord(false));
+
+    // saveRecord(pickedActID, startTime, endTime)
+    //   .then(() => getRecords())
+    //   .then((records) => console.log(records))
+    //   .then(() => setAddRecord(false))
+    //   .catch(console.error);
+  }, [addRecord]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -57,16 +72,25 @@ export default function Index() {
           }}
         />
       )}
-      {state === "pick" && <Picker onPress={() => setState("done")} />}
+      {state === "pick" && (
+        <Picker
+          onPress={() => setState("done")}
+          onPick={(act_id) => {
+            setPickedActID(act_id);
+            setState("done");
+          }}
+        />
+      )}
+      {/* confirmation page */}
       {state === "done" && (
-        <Reset
+        <Confirmation
           res={getTimeFormat(endTime - startTime, false)}
           onPress={() => {
+            setAddRecord(true);
             setState("idle");
-            // setStartTime(0);
-            // setEndTime(0);
             setElapsed(getTimeFormat(0));
           }}
+          id={pickedActID}
         />
       )}
     </SafeAreaView>

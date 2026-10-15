@@ -1,3 +1,5 @@
+import { getSingleActivity } from "@/storage/storage";
+import { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 
 const format = (d: Date) =>
@@ -7,15 +9,22 @@ const format = (d: Date) =>
 
 type ResetProp = {
   res: string;
+  id: number;
   onPress?: () => void;
 };
 
-export default function Reset({ res, onPress }: ResetProp) {
+export default function Confirmation({ res, onPress, id }: ResetProp) {
   const date = new Date();
+  const [act, setAct] = useState("");
+
+  useEffect(() => {
+    getSingleActivity(id).then(setAct);
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{res}</Text>
-      <Text style={styles.text}>--ACTIVITY--</Text>
+      <Text style={styles.text}>{act}</Text>
       <Text style={styles.text}>{format(date)}</Text>
       <Button title="Done!" onPress={onPress} />
     </View>

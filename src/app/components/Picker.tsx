@@ -4,9 +4,10 @@ import { Button, SectionList, StyleSheet, Text, View } from "react-native";
 
 type PickerProp = {
   onPress?: () => void;
+  onPick: (id: number) => void;
 };
 
-export default function Picker({ onPress }: PickerProp) {
+export default function Picker({ onPress, onPick }: PickerProp) {
   const [groups, setGroups] = useState<ActivityGroup[]>([]);
 
   useEffect(() => {
@@ -21,7 +22,7 @@ export default function Picker({ onPress }: PickerProp) {
         sections={groups}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Button title={item.name} onPress={onPress} />
+            <Button title={item.name} onPress={() => onPick(item.act_id)} />
           </View>
         )}
         renderSectionHeader={({ section }) => (
@@ -30,7 +31,7 @@ export default function Picker({ onPress }: PickerProp) {
         keyExtractor={(item) => `${item.act_id}`}
         ListFooterComponent={
           <View style={styles.card}>
-            <Button title="add new" onPress={onPress} />
+            <Button title="add new" />
           </View>
         }
       />
