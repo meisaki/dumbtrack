@@ -81,23 +81,23 @@ export async function getRecords(): Promise<Record[]> {
 };
 
 // currently only adds activity, not edit
-export async function saveActivity(newAct: Activity) {
+export async function saveActivity(name: string, category: string) {
     const db = await dbPromise;
 
     const check = await db.getAllAsync<Activity>(`
         SELECT * FROM Activities
         WHERE name = ?
-    `, newAct.name);
+    `, name);
 
-    if (check.length !== 0) {
-        // what to do if there is an entry by that name already 
-        return;
-    }
+    // if (check.length !== 0) {
+    //     // what to do if there is an entry by that name already 
+    //     return;
+    // }
 
     await db.runAsync(`
-        INSERT INTO Activities
+        INSERT INTO Activities (name, category)
         VALUES (?, ?)
-    `, newAct.name, newAct.category);
+    `, name, category);
 };
 
 export async function saveRecord(act_id: number, start_time: number, end_time: number) {
