@@ -9,6 +9,7 @@ export type Activity = {
 };
 
 export type Record = {
+    rec_id: number,
     activity_id: number, 
     start_time: number, 
     end_time: number
@@ -145,4 +146,23 @@ export async function getSingleActivity(id: number) {
         WHERE act_id = ?    
     `, id)
     return row!.name
+}
+
+// export async function getActivityById(id: number)
+
+/**
+ * Return records that starts or ends within the given period
+ * 
+ * @param dayStart start of the day in ms 
+ * @param dayEnd end of the day in ms
+ */
+export async function getRecords2(dayStart: number, dayEnd: number) {
+    const db = await dbPromise;
+
+    const rows = await db.getAllAsync<Record>(`
+        SELECT * FROM Records
+        WHERE start_time < ? AND end_time > ?
+    `,dayEnd, dayStart)
+
+    return rows
 }

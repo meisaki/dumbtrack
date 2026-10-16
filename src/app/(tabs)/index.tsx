@@ -2,27 +2,13 @@ import { saveRecord } from "@/storage/storage";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { getTimeFormat } from "../../logic/logic";
 import Clock from "../components/Clock";
 import Confirmation from "../components/Confirmation";
 import Picker from "../components/Picker";
 import TimerButton from "../components/TimerButton";
 
 type States = "idle" | "running" | "pick" | "done";
-
-const getTimeFormat = (s: number, miliSec = true) => {
-  const inSec = Math.floor(s / 1000);
-
-  const hr = Math.floor(inSec / 3600);
-  const min = Math.floor((inSec % 3600) / 60);
-  const sec = inSec % 60;
-  const ms = Math.floor((s % 1000) / 10);
-
-  const pad = (n: number) => String(n).padStart(2, "0");
-
-  return (
-    `${pad(hr)}:${pad(min)}:${pad(sec)}` + `${miliSec ? "." + pad(ms) : ""}`
-  );
-};
 
 export default function Index() {
   const [state, setState] = useState<States>("idle");
