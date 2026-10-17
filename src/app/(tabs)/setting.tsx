@@ -6,37 +6,44 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Setting() {
   const [groups, setGroups] = useState<ActivityGroup[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
-      getActivitiesByCategory().then(setGroups);
+      getActivitiesByCategory()
+        .then(setGroups)
+        .then(() => {
+          setLoaded(true);
+        });
     }, [])
   );
 
   return (
     <SafeAreaView style={styles.container}>
-      <SectionList
-        sections={groups}
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Link href={`/activity/${item.name}`} style={styles.text}>
-              {item.name}
-            </Link>
-          </View>
-        )}
-        renderSectionHeader={({ section }) => (
-          <Text style={styles.sectionHeader}>{section.title}</Text>
-        )}
-        keyExtractor={(item) => `${item.act_id}`}
-        ListFooterComponent={
-          <View style={styles.card}>
-            <Button
-              title="add new"
-              onPress={() => router.push("/activity/newact")}
-            />
-          </View>
-        }
-      />
+      {loaded && (
+        <SectionList
+          sections={groups}
+          renderItem={({ item }) => (
+            <View style={styles.card}>
+              <Link href={`/activity/${item.name}`} style={styles.text}>
+                {item.name}
+              </Link>
+            </View>
+          )}
+          renderSectionHeader={({ section }) => (
+            <Text style={styles.sectionHeader}>{section.title}</Text>
+          )}
+          keyExtractor={(item) => `${item.act_id}`}
+          ListFooterComponent={
+            <View style={styles.card}>
+              <Button
+                title="add new"
+                onPress={() => router.push("/activity/newact")}
+              />
+            </View>
+          }
+        />
+      )}
     </SafeAreaView>
   );
 }

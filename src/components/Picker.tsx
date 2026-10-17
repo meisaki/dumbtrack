@@ -1,5 +1,6 @@
 import { ActivityGroup, getActivitiesByCategory } from "@/storage/storage";
-import { useEffect, useState } from "react";
+import { router, useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 import { Button, SectionList, StyleSheet, Text, View } from "react-native";
 
 type PickerProp = {
@@ -10,9 +11,11 @@ type PickerProp = {
 export default function Picker({ onPress, onPick }: PickerProp) {
   const [groups, setGroups] = useState<ActivityGroup[]>([]);
 
-  useEffect(() => {
-    getActivitiesByCategory().then(setGroups);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getActivitiesByCategory().then(setGroups);
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -31,7 +34,10 @@ export default function Picker({ onPress, onPick }: PickerProp) {
         keyExtractor={(item) => `${item.act_id}`}
         ListFooterComponent={
           <View style={styles.card}>
-            <Button title="add new" />
+            <Button
+              title="add new"
+              onPress={() => router.push("/activity/newact")}
+            />
           </View>
         }
       />

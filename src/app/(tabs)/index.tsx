@@ -2,11 +2,11 @@ import { saveRecord } from "@/storage/storage";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Clock from "../../components/Clock";
+import Confirmation from "../../components/Confirmation";
+import Picker from "../../components/Picker";
+import TimerButton from "../../components/TimerButton";
 import { getTimeFormat } from "../../logic/logic";
-import Clock from "../components/Clock";
-import Confirmation from "../components/Confirmation";
-import Picker from "../components/Picker";
-import TimerButton from "../components/TimerButton";
 
 type States = "idle" | "running" | "pick" | "done";
 
@@ -29,14 +29,7 @@ export default function Index() {
 
   useEffect(() => {
     if (!addRecord) return;
-
     saveRecord(pickedActID, startTime, endTime).then(() => setAddRecord(false));
-
-    // saveRecord(pickedActID, startTime, endTime)
-    //   .then(() => getRecords())
-    //   .then((records) => console.log(records))
-    //   .then(() => setAddRecord(false))
-    //   .catch(console.error);
   }, [addRecord]);
 
   return (

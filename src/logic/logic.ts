@@ -1,6 +1,6 @@
-import { Record } from "@/storage/storage";
+import { Activity, Record } from "@/storage/storage";
 
-export type recordElapsed = Record & { elapsed: number };
+export type recordStats = Record & { elapsed: number, act_name: string};
 
 function getElapsed (row: Record, dayStart: number, dayEnd: number) {
     const end = Math.min(row.end_time, dayEnd);
@@ -8,11 +8,13 @@ function getElapsed (row: Record, dayStart: number, dayEnd: number) {
     return (end - start);
   };
   
-export function addElapsed (rows: Record[], dayStart: number, dayEnd: number) {
-    return rows.map((row) => ({ ...row, elapsed: getElapsed(row, dayStart, dayEnd) }));
+export function getRecordStats (rows: Record[], dayStart: number, dayEnd: number, activities: Activity[]) {
+  const names = new Map(activities.map((act) => [act.act_id, act.name]));
+  
+  return rows.map((row) => ({...row, elapsed: getElapsed(row, dayStart, dayEnd), act_name: names.get(row.activity_id) ?? 'unknown'}))
 }
 
-export function sumElapsed(data: recordElapsed[]) {
+export function sumElapsed(data: recordStats[]) {
     return data.reduce((total, row) => total + row.elapsed, 0)
 }
 
