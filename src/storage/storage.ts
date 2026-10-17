@@ -23,12 +23,11 @@ export type ActivityGroup = {
     }[] 
 };
 
-export async function reset() {
+export async function debugReset() {
     const db = await dbPromise;
     await db.execAsync(`
-        DROP TABLE Activities;
-
-        DROP TABLE Records;
+        DROP TABLE IF EXISTS Records;
+        DROP TABLE IF EXISTS Activities;
     `)
 }
 
@@ -61,6 +60,7 @@ export async function setup() {
             INSERT INTO Activities (name, category) VALUES ('Studying', 'Studying');
             INSERT INTO Activities (name, category) VALUES ('Exercise', 'Exercise');
             INSERT INTO Activities (name, category) VALUES ('Chore', 'Chore');
+            INSERT INTO Activities (name, category) VALUES ('Leisure', 'Leisure');
         `)
     }
 };
@@ -141,14 +141,12 @@ export async function getActivitiesByCategory() {
  */
 export async function getSingleActivity(id: number) {
     const db = await dbPromise;
-    const row = await db.getFirstAsync<{ name: string }>(`
-        SELECT name FROM Activities
+    const row = await db.getFirstAsync<Activity>(`
+        SELECT * FROM Activities
         WHERE act_id = ?    
     `, id)
-    return row!.name
+    return row;
 }
-
-// export async function getActivityById(id: number)
 
 /**
  * Return records that starts or ends within the given period
@@ -165,4 +163,45 @@ export async function getRecords2(dayStart: number, dayEnd: number) {
     `,dayEnd, dayStart)
 
     return rows
+}
+
+export async function debugAddRecords() {
+    const db = await dbPromise;
+
+    const now = new Date()
+    const start = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
+    ).getTime()
+    const end =new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() + 1,
+    ).getTime()
+
+    const hr = 1 * 60 * 60 * 1000;
+
+    const recs: [number, number, number][] = [
+        [1, start + 1 * hr, start + 3 * hr],
+        [2, start + 3 * hr, start + 5.5 * hr],
+        [3, start + 6 * hr, start + 7.2 * hr],
+        [4, start - 2 * hr, start + 0.5 * hr],  // crosses into today
+        // [5, end - 1.3 * hr, end + 4 * hr],      // crosses out of today
+      ];
+
+    for (const [a, s, e] of recs) {
+        await db.runAsync(
+        "INSERT INTO Records (activity_id, start_time, end_time) VALUES (?, ?, ?)",
+        [a, s, e]
+        );
+    }
+}
+
+export async function deleteActivity(id: number) {
+    const db = await dbPromise;
+    await db.runAsync(`
+        DELETE FROM Activities
+        WHERE act_id = ?;    
+    `, id)
 }

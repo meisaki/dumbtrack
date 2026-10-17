@@ -44,3 +44,6 @@ example
 
 # vscode
 .vscode/
+
+# debug
+debug.tsx

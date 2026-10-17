@@ -18,7 +18,9 @@ export default function Confirmation({ res, onPress, id }: ResetProp) {
   const [act, setAct] = useState("");
 
   useEffect(() => {
-    getSingleActivity(id).then(setAct);
+    getSingleActivity(id).then((row) => {
+      setAct(row!.name);
+    });
   }, []);
 
   return (

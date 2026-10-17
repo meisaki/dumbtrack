@@ -10,6 +10,7 @@ export default function Setting() {
 
   useFocusEffect(
     useCallback(() => {
+      setLoaded(false);
       getActivitiesByCategory()
         .then(setGroups)
         .then(() => {
@@ -25,7 +26,7 @@ export default function Setting() {
           sections={groups}
           renderItem={({ item }) => (
             <View style={styles.card}>
-              <Link href={`/activity/${item.name}`} style={styles.text}>
+              <Link href={`/activity/${item.act_id}`} style={styles.text}>
                 {item.name}
               </Link>
             </View>
