@@ -1,49 +1,61 @@
-import { getSingleActivity } from "@/storage/storage";
-import { useEffect, useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { getTimeFormat } from "@/logic/logic";
+import { Button, Modal, StyleSheet, Text, View } from "react-native";
 
-const format = (d: Date) =>
-  `${d.getFullYear()}/${String(d.getMonth() + 1)}/${String(
-    d.getDate()
-  ).padStart(2, "0")}`;
-
-type ResetProp = {
-  res: string;
-  id: number;
-  onPress?: () => void;
+type confirmProp = {
+  pressConfirm: () => void;
+  pressCancel: () => void;
+  result: number;
+  act_name: string;
+  visibility: boolean;
 };
-
-export default function Confirmation({ res, onPress, id }: ResetProp) {
-  const date = new Date();
-  const [act, setAct] = useState("");
-
-  useEffect(() => {
-    getSingleActivity(id).then((row) => {
-      setAct(row!.name);
-    });
-  }, []);
-
+export default function Confirmation2({
+  pressConfirm,
+  pressCancel,
+  result,
+  act_name,
+  visibility,
+}: confirmProp) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{res}</Text>
-      <Text style={styles.text}>{act}</Text>
-      <Text style={styles.text}>{format(date)}</Text>
-      <Button title="Done!" onPress={onPress} />
-    </View>
+    <Modal
+      visible={visibility}
+      animationType="fade"
+      presentationStyle="formSheet"
+    >
+      <View style={styles.modalContainer}>
+        <Text style={styles.textHeader}>TRACKED:</Text>
+        <Text numberOfLines={1} style={styles.text}>
+          {getTimeFormat(result, true)}
+        </Text>
+        <Text style={styles.text}>{act_name}</Text>
+        <Text style={styles.text}>{new Date().toLocaleDateString()}</Text>
+        <View style={styles.sideway}>
+          <Button title="cancel" onPress={pressCancel} />
+          <Button title="confirm" onPress={pressConfirm} />
+        </View>
+      </View>
+    </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    borderWidth: 1,
+  modalContainer: {
+    flex: 1,
+    borderWidth: 3,
+    // justifyContent: "flex",
     alignItems: "center",
-    paddingHorizontal: 30,
-    paddingVertical: 15,
-    height: 300,
+    paddingTop: 100,
+  },
+  sideway: {
+    flexDirection: "row",
     justifyContent: "space-between",
   },
   text: {
-    fontSize: 32,
+    fontSize: 58,
     color: "grey",
+    fontWeight: "500",
+  },
+  textHeader: {
+    fontSize: 60,
+    fontWeight: "600",
   },
 });

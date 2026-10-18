@@ -1,15 +1,23 @@
-import { ActivityGroup, getActivitiesByCategory } from "@/storage/storage";
-import { router, useFocusEffect } from "expo-router";
+import Confirmation from "@/components/Confirmation";
+import {
+  ActivityGroup,
+  getActivitiesByCategory,
+  saveRecord,
+} from "@/storage/storage";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useCallback, useState } from "react";
 import { Button, SectionList, StyleSheet, Text, View } from "react-native";
 
-type PickerProp = {
-  onPress?: () => void;
-  onPick: (id: number) => void;
-};
-
-export default function Picker({ onPress, onPick }: PickerProp) {
+export default function activitypicker() {
+  const [visible, setVisible] = useState(false);
   const [groups, setGroups] = useState<ActivityGroup[]>([]);
+  const { startTime, endTime } = useLocalSearchParams<{
+    startTime: string;
+    endTime: string;
+  }>();
+
+  const start = Number(startTime);
+  const end = Number(endTime);
 
   useFocusEffect(
     useCallback(() => {
@@ -19,13 +27,22 @@ export default function Picker({ onPress, onPick }: PickerProp) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Picker</Text>
-      <Button title="next" onPress={onPress} />
       <SectionList
         sections={groups}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Button title={item.name} onPress={() => onPick(item.act_id)} />
+            <Button title={item.name} onPress={() => setVisible(true)} />
+            <Confirmation
+              result={end - start}
+              act_name={item.name}
+              visibility={visible}
+              pressConfirm={async () => {
+                await saveRecord(item.act_id, start, end);
+                setVisible(false);
+                router.back();
+              }}
+              pressCancel={() => setVisible(false)}
+            />
           </View>
         )}
         renderSectionHeader={({ section }) => (

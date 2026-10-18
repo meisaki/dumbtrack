@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text } from "react-native";
 
 type TimerProp = {
   onPress?: () => void;
@@ -6,11 +6,9 @@ type TimerProp = {
 
 export default function TimerButton({ onPress }: TimerProp) {
   return (
-    <View>
-      <Pressable style={styles.container} onPress={onPress}>
-        <Text style={styles.timerText}>Timer</Text>
-      </Pressable>
-    </View>
+    <Pressable style={styles.container} onPress={onPress}>
+      <Text style={styles.timerText}>Timer</Text>
+    </Pressable>
   );
 }
 
