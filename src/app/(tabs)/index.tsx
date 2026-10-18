@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Clock from "../../components/Clock";
 import TimerButton from "../../components/TimerButton";
-import { getTimeFormat } from "../../logic/logic";
+import { colors, getTimeFormat } from "../../logic/logic";
 
 type States = "idle" | "running";
 
@@ -58,6 +58,7 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: colors.cream,
     flex: 1,
     alignItems: "center",
     justifyContent: "center",

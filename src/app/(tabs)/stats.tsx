@@ -5,6 +5,7 @@ import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import { DonutChart } from "react-native-chart-kit/v2";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
+  colors,
   getRecordStats,
   getTimeFormat,
   recordStats,
@@ -65,7 +66,7 @@ export default function Stats() {
           elapsed: Math.max(0, dayEnd - dayStart - sumElapsed(newRows)),
           act_name: "Untracked",
         };
-        setData([...newRows, untracked]);
+        setData([untracked, ...newRows]); // add untracked first so it will alawys have same color
       })();
     }, [])
   );
@@ -88,7 +89,7 @@ export default function Stats() {
         activeSlice={{ inactiveOpacity: 0.8, strokeWidth: 2 }}
         width={winWidth * 0.97}
         height={winHeight * 0.6}
-        theme={{ background: "#f2f2f2" }}
+        theme={{ background: colors.cream }}
         innerRadiusRatio={0.5}
         sliceSeparator={{ width: 3 }}
         legend={{
@@ -118,6 +119,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    backgroundColor: colors.cream,
   },
   header: {
     fontSize: 32,
