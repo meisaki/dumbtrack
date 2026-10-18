@@ -1,23 +1,10 @@
+import AddButton from "@/components/AddButton";
+import Heading from "@/components/Heading";
+import { colors } from "@/logic/logic";
 import { ActivityGroup, getActivitiesByCategory } from "@/storage/storage";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { Pressable, SectionList, StyleSheet, Text, View } from "react-native";
-
-/*
- * Blogger — colourlovers.com
- * Palette by plamenj, 2007
- * https://www.colourlovers.com/palette/185999/Blogger
- * Colors named by Xpeder, jspencer, rrradio
- * Licence: CC-BY-NC-SA — http://creativecommons.org/licenses/by-nc-sa/3.0/
- */
-const colors = {
-  orange: "#FF6600",
-  darkblue: "#104386",
-  lightblue: "#6699FF",
-  cream: "#F5EDE3",
-  sandcream: "#E1D4C0",
-  text: "#333333",
-};
 
 export default function Setting() {
   const [groups, setGroups] = useState<ActivityGroup[]>([]);
@@ -64,26 +51,12 @@ export default function Setting() {
             <Text style={styles.listItemArrow}>→</Text>
           </Pressable>
         )}
-        ListHeaderComponent={
-          <View style={styles.listHeaderContainer}>
-            <Text style={styles.listHeaderText}>Activities</Text>
-            <Text style={styles.listHeaderSubtitle}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse
-              accusamus impedit tenetur.
-            </Text>
-          </View>
-        }
+        ListHeaderComponent={<Heading header="Activities" />}
         ListFooterComponent={
-          <Pressable
-            style={({ pressed }) => [
-              styles.addNewContainer,
-              pressed && { opacity: 0.8 },
-            ]}
-            onPress={(pressed) => router.push("/activity/newact")}
-          >
-            <Text style={styles.addNewPlus}>⊕</Text>
-            <Text style={styles.addNewText}>Add New Activity</Text>
-          </Pressable>
+          <AddButton
+            buttonLabel="Create New Activity"
+            onPress={() => router.push("/activity/newact")}
+          />
         }
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
@@ -96,22 +69,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.cream,
     padding: 20,
-  },
-
-  listHeaderContainer: {
-    marginBottom: 24,
-  },
-
-  listHeaderText: {
-    fontSize: 34,
-    fontWeight: "bold",
-    color: colors.text,
-  },
-
-  listHeaderSubtitle: {
-    fontSize: 16,
-    color: "grey",
-    lineHeight: 22,
   },
 
   sectionHeaderContainer: {
@@ -165,31 +122,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.text,
     fontWeight: "500",
-  },
-
-  addNewContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.darkblue,
-
-    gap: 16,
-    padding: 16,
-
-    marginTop: 16,
-    borderRadius: 16,
-  },
-
-  addNewText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "500",
-  },
-
-  addNewPlus: {
-    color: "white",
-    fontSize: 22,
-    fontWeight: "bold",
   },
 
   separator: {

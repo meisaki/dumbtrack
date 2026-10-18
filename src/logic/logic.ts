@@ -1,5 +1,21 @@
 import { Activity, Record } from "@/storage/storage";
 
+/*
+ * Blogger — colourlovers.com
+ * Palette by plamenj, 2007
+ * https://www.colourlovers.com/palette/185999/Blogger
+ * Colors named by Xpeder, jspencer, rrradio
+ * Licence: CC-BY-NC-SA — http://creativecommons.org/licenses/by-nc-sa/3.0/
+ */
+export const colors = {
+  orange: "#FF6600",
+  darkblue: "#104386",
+  lightblue: "#6699FF",
+  cream: "#F5EDE3",
+  sandcream: "#E1D4C0",
+  text: "#333333",
+};
+
 export type recordStats = Record & { elapsed: number, act_name: string};
 
 function getElapsed (row: Record, dayStart: number, dayEnd: number) {
