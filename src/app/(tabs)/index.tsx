@@ -1,9 +1,9 @@
+import TimerButton from "@/components/TimerButton";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Clock from "../../components/Clock";
-import TimerButton from "../../components/TimerButton";
 import { colors, getTimeFormat } from "../../logic/logic";
 
 type States = "idle" | "running";
@@ -27,6 +27,7 @@ export default function Index() {
     <SafeAreaView style={styles.container}>
       {state === "idle" && (
         <TimerButton
+          size={400}
           onPress={() => {
             setStartTime(Date.now());
             setState("running");

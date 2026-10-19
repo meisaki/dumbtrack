@@ -3,7 +3,8 @@ import { colors } from "@/logic/logic";
 import { ActivityGroup, getActivitiesByCategory } from "@/storage/storage";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Setting() {
   const [groups, setGroups] = useState<ActivityGroup[]>([]);
@@ -21,12 +22,12 @@ export default function Setting() {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ActivityList
         data={groups}
         onItemPress={(item) => router.push(`../activity/${item.act_id}`)}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

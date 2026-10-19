@@ -15,9 +15,13 @@ export default function RootLayout() {
   if (!ready) return null;
 
   return (
-    <Stack>
+    <Stack screenOptions={{ headerBackButtonDisplayMode: "minimal" }}>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="activity/[id]" options={{ headerShown: true }} />
+      <Stack.Screen name="activity/newact" options={{ title: "Create New" }} />
+      <Stack.Screen
+        name="activity/activitypicker"
+        options={{ title: "Choose an Acitivity" }}
+      />
     </Stack>
   );
 }

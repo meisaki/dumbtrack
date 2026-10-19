@@ -1,21 +1,16 @@
 import { colors } from "@/logic/logic";
 import { ActivityGroup } from "@/storage/storage";
-import { Href, router } from "expo-router";
+import { router } from "expo-router";
 import { Pressable, SectionList, StyleSheet, Text, View } from "react-native";
 import AddButton from "./AddButton";
 import Heading from "./Heading";
 
 type activityListProp = {
   data: ActivityGroup[];
-  getHref?: (item: { act_id: number; name: string }) => Href;
   onItemPress: (item: { act_id: number; name: string }) => void;
 };
 
-export default function ActivityList({
-  data,
-  getHref,
-  onItemPress,
-}: activityListProp) {
+export default function ActivityList({ data, onItemPress }: activityListProp) {
   return (
     <SectionList
       sections={data}
@@ -43,7 +38,12 @@ export default function ActivityList({
           <Text style={styles.listItemArrow}>→</Text>
         </Pressable>
       )}
-      ListHeaderComponent={<Heading header="Activities" />}
+      ListHeaderComponent={
+        <Heading
+          header="Activities"
+          subtitle="All your activies sorted by category"
+        />
+      }
       ListFooterComponent={
         <AddButton
           buttonLabel="Create New Activity"

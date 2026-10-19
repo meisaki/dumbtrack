@@ -1,28 +1,16 @@
 import ActivityList from "@/components/ActivityList";
-import Confirmation from "@/components/Confirmation";
 import { colors } from "@/logic/logic";
 import {
   ActivityGroup,
   getActivitiesByCategory,
   saveRecord,
 } from "@/storage/storage";
-import {
-  router,
-  Stack,
-  useFocusEffect,
-  useLocalSearchParams,
-} from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useCallback, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 
 export default function activitypicker() {
   const [groups, setGroups] = useState<ActivityGroup[]>([]);
-
-  // store the item selected from the list
-  const [selected, setSelected] = useState<{
-    act_id: number;
-    name: string;
-  } | null>(null);
 
   const { startTime, endTime, elapsed } = useLocalSearchParams<{
     startTime: string;
@@ -41,23 +29,31 @@ export default function activitypicker() {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen
-        options={{ title: "Choose Acitivity", headerBackTitle: "Back" }}
+      <ActivityList
+        data={groups}
+        onItemPress={(item) => {
+          Alert.alert(
+            "Confirmation",
+            `Activity Name: ${item.name}` +
+              `\nTime Tracked:  ${elapsed}` +
+              `\nDate Added: ${new Date().toLocaleDateString()}`,
+            [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "Add",
+                style: "default",
+                onPress: async () => {
+                  await saveRecord(item.act_id, start, end);
+                  router.back();
+                },
+              },
+            ]
+          );
+        }}
       />
-      <ActivityList data={groups} onItemPress={setSelected} />
-      {selected && (
-        <Confirmation
-          result={elapsed}
-          act_name={selected.name}
-          visibility={true}
-          pressConfirm={async () => {
-            await saveRecord(selected.act_id, start, end);
-            setSelected(null);
-            router.back();
-          }}
-          pressCancel={() => setSelected(null)}
-        />
-      )}
     </View>
   );
 }

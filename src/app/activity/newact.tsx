@@ -2,7 +2,7 @@ import AddButton from "@/components/AddButton";
 import Heading from "@/components/Heading";
 import { colors } from "@/logic/logic";
 import { saveActivity } from "@/storage/storage";
-import { router, Stack } from "expo-router";
+import { router } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
@@ -23,7 +23,6 @@ export default function newact() {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: "" }} />
       <Heading
         header="New Activity"
         subtitle="Add a new activity you want to track!"
