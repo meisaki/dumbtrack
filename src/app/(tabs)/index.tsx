@@ -45,11 +45,17 @@ export default function Index() {
               params: {
                 startTime: startTime.toString(),
                 endTime: end.toString(),
+                elapsed: elapsed,
               },
             });
 
+            setElapsed(getTimeFormat(0));
             setState("idle");
           }}
+          onCancel={() => {
+            setState("idle");
+          }}
+          onPause={() => {}}
         />
       )}
     </SafeAreaView>
@@ -62,5 +68,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    padding: 10,
   },
 });

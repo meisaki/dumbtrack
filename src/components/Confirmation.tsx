@@ -1,10 +1,9 @@
-import { getTimeFormat } from "@/logic/logic";
 import { Button, Modal, StyleSheet, Text, View } from "react-native";
 
 type confirmProp = {
   pressConfirm: () => void;
   pressCancel: () => void;
-  result: number;
+  result: string;
   act_name: string;
   visibility: boolean;
 };
@@ -18,13 +17,13 @@ export default function Confirmation2({
   return (
     <Modal
       visible={visibility}
-      animationType="fade"
+      animationType="slide"
       presentationStyle="formSheet"
     >
       <View style={styles.modalContainer}>
         <Text style={styles.textHeader}>TRACKED:</Text>
         <Text numberOfLines={1} style={styles.text}>
-          {getTimeFormat(result, true)}
+          {result}
         </Text>
         <Text style={styles.text}>{act_name}</Text>
         <Text style={styles.text}>{new Date().toLocaleDateString()}</Text>

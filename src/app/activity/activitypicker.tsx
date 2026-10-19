@@ -6,7 +6,12 @@ import {
   getActivitiesByCategory,
   saveRecord,
 } from "@/storage/storage";
-import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
+import {
+  router,
+  Stack,
+  useFocusEffect,
+  useLocalSearchParams,
+} from "expo-router";
 import { useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -19,9 +24,10 @@ export default function activitypicker() {
     name: string;
   } | null>(null);
 
-  const { startTime, endTime } = useLocalSearchParams<{
+  const { startTime, endTime, elapsed } = useLocalSearchParams<{
     startTime: string;
     endTime: string;
+    elapsed: string;
   }>();
 
   const start = Number(startTime);
@@ -35,10 +41,13 @@ export default function activitypicker() {
 
   return (
     <View style={styles.container}>
+      <Stack.Screen
+        options={{ title: "Choose Acitivity", headerBackTitle: "Back" }}
+      />
       <ActivityList data={groups} onItemPress={setSelected} />
       {selected && (
         <Confirmation
-          result={end - start}
+          result={elapsed}
           act_name={selected.name}
           visibility={true}
           pressConfirm={async () => {
