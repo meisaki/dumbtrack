@@ -25,7 +25,15 @@ export default function Setting() {
     <SafeAreaView style={styles.container}>
       <ActivityList
         data={groups}
-        onItemPress={(item) => router.push(`../activity/${item.act_id}`)}
+        onItemPress={(item) =>
+          router.push({
+            pathname: `/activity/[id]`,
+            params: {
+              id: item.act_id,
+              name: item.name,
+            },
+          })
+        }
       />
     </SafeAreaView>
   );

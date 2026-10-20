@@ -1,5 +1,6 @@
 import { colors } from "@/logic/logic";
 import { StyleSheet, Text, View } from "react-native";
+import ColorBall from "./ColorBall";
 
 type activityCardProp = {
   label: string;
@@ -26,12 +27,7 @@ export default function ActivityCard({
         },
       ]}
     >
-      {colorBall && (
-        <View
-          // circular color key: bgcolor sets the color of activity
-          style={[{ backgroundColor: colorBall }, styles.colorBall]}
-        />
-      )}
+      {colorBall && <ColorBall color={colorBall} />}
       <Text numberOfLines={1} style={[styles.labelText]}>
         {label}
       </Text>

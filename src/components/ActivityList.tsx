@@ -3,7 +3,7 @@ import { ActivityGroup } from "@/storage/storage";
 import { router } from "expo-router";
 import { Pressable, SectionList, StyleSheet, Text, View } from "react-native";
 import ActivityCard from "./ActivityCard";
-import AddButton from "./AddButton";
+import CustomButton from "./CustomButton";
 import Heading from "./Heading";
 
 type activityListProp = {
@@ -39,9 +39,11 @@ export default function ActivityList({ data, onItemPress }: activityListProp) {
         />
       }
       ListFooterComponent={
-        <AddButton
+        <CustomButton
           buttonLabel="Create New Activity"
           onPress={() => router.push("/activity/newact")}
+          bgColor={colors.darkblue}
+          icon="⊕"
         />
       }
       ItemSeparatorComponent={() => <View style={styles.separator} />}

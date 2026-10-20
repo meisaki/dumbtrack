@@ -20,7 +20,7 @@ export default function Heading({
       {subtitle !== "" && (
         <Text
           style={{
-            fontSize: size / 2,
+            fontSize: Math.max(size / 2, 14),
             lineHeight: (size / 1.5) * 1.4,
             color: "grey",
           }}

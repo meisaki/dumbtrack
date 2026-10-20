@@ -205,3 +205,19 @@ export async function deleteActivity(id: number) {
         WHERE act_id = ?;    
     `, id)
 }
+
+// get number of [records with given activity id]
+// get total elapsed time of [records with given activity id]
+export async function getActivityInfo(actId: number) {
+    const db = await dbPromise;
+
+    const rows = await db.getAllAsync<Record>(`
+        SELECT * FROM Records
+        WHERE activity_id = ?;
+    `, actId)
+
+    const counts = rows.length
+    const totalTime = rows.reduce((total, row) => total + (row.end_time - row.start_time), 0)
+
+    return {counts, totalTime}
+}

@@ -1,28 +1,32 @@
-import { colors } from "@/logic/logic";
 import { Pressable, StyleSheet, Text } from "react-native";
 
 type addButtonProp = {
   onPress: () => void;
   buttonLabel: string;
   disabled?: boolean;
+  bgColor: string;
+  icon?: string;
 };
 
-export default function AddButton({
+export default function CustomButton({
   onPress,
   buttonLabel,
   disabled = false,
+  bgColor,
+  icon = "",
 }: addButtonProp) {
   return (
     <Pressable
       style={({ pressed }) => [
         styles.addNewContainer,
+        { backgroundColor: bgColor },
         pressed && { opacity: 0.8 },
         disabled && { opacity: 0.5 },
       ]}
       onPress={onPress}
       disabled={disabled}
     >
-      <Text style={styles.addNewPlus}>⊕</Text>
+      {icon && <Text style={styles.addNewPlus}>{icon}</Text>}
       <Text style={styles.addNewText}>{buttonLabel}</Text>
     </Pressable>
   );
@@ -33,7 +37,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: colors.darkblue,
 
     gap: 16,
     padding: 16,
