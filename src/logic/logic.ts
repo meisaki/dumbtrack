@@ -35,6 +35,7 @@ export function sumElapsed(data: recordStats[]) {
 }
 
 export function getTimeFormat (s: number, miliSec = true) {
+    s = s ?? 0;
     const inSec = Math.floor(s / 1000);
   
     const hr = Math.floor(inSec / 3600);

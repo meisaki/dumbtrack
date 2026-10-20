@@ -2,6 +2,7 @@ import { colors } from "@/logic/logic";
 import { ActivityGroup } from "@/storage/storage";
 import { router } from "expo-router";
 import { Pressable, SectionList, StyleSheet, Text, View } from "react-native";
+import ActivityCard from "./ActivityCard";
 import AddButton from "./AddButton";
 import Heading from "./Heading";
 
@@ -26,16 +27,9 @@ export default function ActivityList({ data, onItemPress }: activityListProp) {
       renderItem={({ item }) => (
         <Pressable
           onPress={() => onItemPress(item)}
-          style={({ pressed }) => [
-            styles.listItemContainer,
-            pressed && { opacity: 0.8 },
-          ]}
+          style={({ pressed }) => [pressed && { opacity: 0.8 }]}
         >
-          <Text numberOfLines={1} style={styles.listItemText}>
-            {item.name}
-          </Text>
-
-          <Text style={styles.listItemArrow}>→</Text>
+          <ActivityCard label={item.name} subtitle={"→"} padding={16} />
         </Pressable>
       )}
       ListHeaderComponent={
@@ -100,13 +94,6 @@ const styles = StyleSheet.create({
     color: "lightgrey",
     fontWeight: "800",
     fontSize: 24,
-  },
-
-  text: {
-    textAlign: "center",
-    fontSize: 20,
-    color: colors.text,
-    fontWeight: "500",
   },
 
   separator: {

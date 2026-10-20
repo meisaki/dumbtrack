@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
   },
 
   formCard: {
+    marginTop: 12,
     backgroundColor: "white",
     borderWidth: 1,
     borderRadius: 10,
