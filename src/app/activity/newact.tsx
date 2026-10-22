@@ -56,7 +56,7 @@ export default function newact() {
         />
       </View>
       <CustomButton
-        buttonLabel="Create New Activity"
+        buttonLabel="Add Activity"
         onPress={() => router.push("/activity/newact")}
         bgColor={colors.darkblue}
         icon="⊕"

@@ -93,7 +93,7 @@ export default function Id() {
             <ColorBall color="green" />
             <Text style={styles.infoText}>Total time tracked:{" \t"}</Text>
             <Text style={[styles.infoText, { flex: 0 }]}>
-              {getTimeFormat(countTime?.totalTime ?? 0, false)}
+              {getTimeFormat(countTime?.totalTime ?? 0)}
             </Text>
           </View>
         </View>

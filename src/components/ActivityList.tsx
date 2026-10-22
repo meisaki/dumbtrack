@@ -1,53 +1,70 @@
 import { colors } from "@/logic/logic";
 import { ActivityGroup } from "@/storage/storage";
 import { router } from "expo-router";
-import { Pressable, SectionList, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  SectionList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import ActivityCard from "./ActivityCard";
 import CustomButton from "./CustomButton";
 import Heading from "./Heading";
 
 type activityListProp = {
   data: ActivityGroup[];
+  loaded: boolean;
   onItemPress: (item: { act_id: number; name: string }) => void;
 };
 
-export default function ActivityList({ data, onItemPress }: activityListProp) {
+export default function ActivityList({
+  data,
+  loaded,
+  onItemPress,
+}: activityListProp) {
   return (
-    <SectionList
-      sections={data}
-      keyExtractor={(item) => `${item.act_id}`}
-      stickySectionHeadersEnabled={false}
-      showsVerticalScrollIndicator={false}
-      renderSectionHeader={({ section }) => (
-        <View style={styles.sectionHeaderContainer}>
-          <View style={styles.sectionHeaderComponent} />
-          <Text style={styles.sectionHeaderText}>{section.title}</Text>
-        </View>
-      )}
-      renderItem={({ item }) => (
-        <Pressable
-          onPress={() => onItemPress(item)}
-          style={({ pressed }) => [pressed && { opacity: 0.8 }]}
-        >
-          <ActivityCard label={item.name} subtitle={"→"} padding={16} />
-        </Pressable>
-      )}
-      ListHeaderComponent={
-        <Heading
-          header="Activities"
-          subtitle="All your activies sorted by category"
+    <>
+      {!loaded && <ActivityIndicator size={"large"} />}
+      {loaded && (
+        <SectionList
+          sections={data}
+          keyExtractor={(item) => `${item.act_id}`}
+          stickySectionHeadersEnabled={false}
+          showsVerticalScrollIndicator={false}
+          renderSectionHeader={({ section }) => (
+            <View style={styles.sectionHeaderContainer}>
+              <View style={styles.sectionHeaderComponent} />
+              <Text style={styles.sectionHeaderText}>{section.title}</Text>
+            </View>
+          )}
+          renderItem={({ item }) => (
+            <Pressable
+              onPress={() => onItemPress(item)}
+              style={({ pressed }) => [pressed && { opacity: 0.8 }]}
+            >
+              <ActivityCard label={item.name} subtitle={"→"} padding={16} />
+            </Pressable>
+          )}
+          ListHeaderComponent={
+            <Heading
+              header="Activities"
+              subtitle="All your activies sorted by category"
+            />
+          }
+          ListFooterComponent={
+            <CustomButton
+              buttonLabel="Create New Activity"
+              onPress={() => router.push("/activity/newact")}
+              bgColor={colors.darkblue}
+              icon="⊕"
+            />
+          }
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
         />
-      }
-      ListFooterComponent={
-        <CustomButton
-          buttonLabel="Create New Activity"
-          onPress={() => router.push("/activity/newact")}
-          bgColor={colors.darkblue}
-          icon="⊕"
-        />
-      }
-      ItemSeparatorComponent={() => <View style={styles.separator} />}
-    />
+      )}
+    </>
   );
 }
 

@@ -4,6 +4,7 @@ import { getActivities, getRecords2 } from "@/storage/storage";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -40,12 +41,14 @@ const colorList = [
 ];
 
 export default function Stats() {
+  const [loaded, setloaded] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [data, setData] = useState<recordStats[]>([]);
   const { width: winWidth, height: winHeight } = useWindowDimensions();
 
   useFocusEffect(
     useCallback(() => {
+      setloaded(false);
       const now = new Date();
       const dayStart = new Date(
         now.getFullYear(),
@@ -73,75 +76,78 @@ export default function Stats() {
           act_name: "Untracked",
         };
         setData([untracked, ...newRows]); // add untracked first so it will alawys have same color
+        setloaded(true);
       })();
     }, [])
   );
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Heading
-          header={"Your Daily Report"}
-          subtitle="See how you spent your day"
-        />
-        <DonutChart
-          data={data}
-          valueKey="elapsed"
-          labelKey="act_name"
-          colors={colorList}
-          selectedIndex={selectedIndex}
-          interaction={{
-            mode: "tap",
-            onSelect: (event) => setSelectedIndex(event.index),
-          }}
-          centerLabel={
-            <View style={styles.centerLabelContainer}>
-              <Text style={styles.centerLabelHeading}>
-                {data[selectedIndex]?.act_name ?? "Tap"}
-              </Text>
-              <Text style={styles.centerLabelTime}>
-                {getTimeFormat(data[selectedIndex]?.elapsed, false)}
-              </Text>
-              <Text style={styles.centerLabelDate}>
-                {new Date().toLocaleDateString()}
+      {!loaded && <ActivityIndicator size={"large"} />}
+      {loaded && (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Heading
+            header={"Your Daily Report"}
+            subtitle="See how you spent your day"
+          />
+          <DonutChart
+            data={data}
+            valueKey="elapsed"
+            labelKey="act_name"
+            colors={colorList}
+            selectedIndex={selectedIndex}
+            interaction={{
+              mode: "tap",
+              onSelect: (event) => setSelectedIndex(event.index),
+            }}
+            centerLabel={
+              <View style={styles.centerLabelContainer}>
+                <Text style={styles.centerLabelHeading}>
+                  {data[selectedIndex]?.act_name ?? "Tap"}
+                </Text>
+                <Text style={styles.centerLabelTime}>
+                  {getTimeFormat(data[selectedIndex]?.elapsed)}
+                </Text>
+                <Text style={styles.centerLabelDate}>
+                  {new Date().toLocaleDateString()}
+                </Text>
+              </View>
+            }
+            activeSlice={{ inactiveOpacity: 0.8, strokeWidth: 2 }}
+            width={winWidth * 0.9}
+            height={400}
+            theme={{ background: colors.cream }}
+            innerRadiusRatio={0.6}
+            sliceSeparator={{ width: 3 }}
+            legend={false}
+          />
+          <View style={styles.breakdownContainer}>
+            <Heading header={"Activity Breakdown"} size={20} />
+            <View style={styles.cardContainer}>
+              {data.slice(1).map((item, index) => {
+                return (
+                  <ActivityCard
+                    key={item.rec_id}
+                    label={item.act_name}
+                    colorBall={colorList[index + 1]}
+                    subtitle={getTimeFormat(item.elapsed)}
+                    highlight={selectedIndex === index + 1}
+                    padding={8}
+                  />
+                );
+              })}
+            </View>
+            <View style={styles.totalRow}>
+              <Text style={styles.totalText}>
+                Total Tracked:{" "}
+                {getTimeFormat(
+                  data.slice(1).reduce((total, row) => total + row.elapsed, 0)
+                )}
               </Text>
             </View>
-          }
-          activeSlice={{ inactiveOpacity: 0.8, strokeWidth: 2 }}
-          width={winWidth * 0.9}
-          height={400}
-          theme={{ background: colors.cream }}
-          innerRadiusRatio={0.6}
-          sliceSeparator={{ width: 3 }}
-          legend={false}
-        />
-        <View style={styles.breakdownContainer}>
-          <Heading header={"Activity Breakdown"} size={20} />
-          <View style={styles.cardContainer}>
-            {data.slice(1).map((item, index) => {
-              return (
-                <ActivityCard
-                  key={item.rec_id}
-                  label={item.act_name}
-                  colorBall={colorList[index + 1]}
-                  subtitle={getTimeFormat(item.elapsed, false)}
-                  highlight={selectedIndex === index + 1}
-                  padding={8}
-                />
-              );
-            })}
           </View>
-          <View style={styles.totalRow}>
-            <Text style={styles.totalText}>
-              Total Tracked:{" "}
-              {getTimeFormat(
-                data.slice(1).reduce((total, row) => total + row.elapsed, 0),
-                false
-              )}
-            </Text>
-          </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 }

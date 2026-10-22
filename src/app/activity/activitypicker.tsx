@@ -11,6 +11,7 @@ import { Alert, StyleSheet, View } from "react-native";
 
 export default function activitypicker() {
   const [groups, setGroups] = useState<ActivityGroup[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   const { startTime, endTime, elapsed } = useLocalSearchParams<{
     startTime: string;
@@ -23,13 +24,17 @@ export default function activitypicker() {
 
   useFocusEffect(
     useCallback(() => {
-      getActivitiesByCategory().then(setGroups);
+      setLoaded(false);
+      getActivitiesByCategory()
+        .then(setGroups)
+        .then(() => setLoaded(true));
     }, [])
   );
 
   return (
     <View style={styles.container}>
       <ActivityList
+        loaded={loaded}
         data={groups}
         onItemPress={(item) => {
           Alert.alert(

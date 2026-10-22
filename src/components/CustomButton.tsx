@@ -18,7 +18,7 @@ export default function CustomButton({
   return (
     <Pressable
       style={({ pressed }) => [
-        styles.addNewContainer,
+        styles.buttonContainer,
         { backgroundColor: bgColor },
         pressed && { opacity: 0.8 },
         disabled && { opacity: 0.5 },
@@ -26,14 +26,14 @@ export default function CustomButton({
       onPress={onPress}
       disabled={disabled}
     >
-      {icon && <Text style={styles.addNewPlus}>{icon}</Text>}
-      <Text style={styles.addNewText}>{buttonLabel}</Text>
+      {icon && <Text style={styles.buttonIcon}>{icon}</Text>}
+      <Text style={styles.buttonText}>{buttonLabel}</Text>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  addNewContainer: {
+  buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -43,15 +43,17 @@ const styles = StyleSheet.create({
 
     marginTop: 16,
     borderRadius: 16,
+
+    width: "100%",
   },
 
-  addNewText: {
+  buttonText: {
     color: "white",
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: "700",
   },
 
-  addNewPlus: {
+  buttonIcon: {
     color: "white",
     fontSize: 22,
     fontWeight: "bold",

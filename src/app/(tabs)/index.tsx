@@ -1,9 +1,9 @@
+import Clock from "@/components/Clock";
 import TimerButton from "@/components/TimerButton";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Clock from "../../components/Clock";
 import { colors, getTimeFormat } from "../../logic/logic";
 
 type States = "idle" | "running";
@@ -19,7 +19,7 @@ export default function Index() {
     const id = setInterval(() => {
       const current = Date.now() - startTime;
       setElapsed(getTimeFormat(current));
-    }, 50);
+    }, 500);
     return () => clearInterval(id);
   }, [state, startTime]);
 
@@ -34,7 +34,6 @@ export default function Index() {
           }}
         />
       )}
-
       {state === "running" && (
         <Clock
           time={elapsed}
@@ -53,10 +52,6 @@ export default function Index() {
             setElapsed(getTimeFormat(0));
             setState("idle");
           }}
-          onCancel={() => {
-            setState("idle");
-          }}
-          onPause={() => {}}
         />
       )}
     </SafeAreaView>

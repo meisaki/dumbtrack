@@ -8,15 +8,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Setting() {
   const [groups, setGroups] = useState<ActivityGroup[]>([]);
-  // const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
-      // setLoaded(false);
+      setLoaded(false);
       getActivitiesByCategory()
         .then(setGroups)
         .then(() => {
-          // setLoaded(true);
+          setLoaded(true);
         });
     }, [])
   );
@@ -24,6 +24,7 @@ export default function Setting() {
   return (
     <SafeAreaView style={styles.container}>
       <ActivityList
+        loaded={loaded}
         data={groups}
         onItemPress={(item) =>
           router.push({
